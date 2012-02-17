@@ -108,9 +108,15 @@
         }        
     }
 
-    $.fn.collision = function () {
-        return new Collision(this);
-    }
+  $.fn.collision = function ( option ) {
+    return this.each(function () {
+      var $this = $(this)
+        , data = $this.data('collision')
+        , options = typeof option == 'object' && option
+      if (!data) $this.data('collision', (data = new Collision(this, options)))
+      if (typeof option == 'string') data[option]()
+    })
+  }
 
     $.fn.collision.Constructor = Collision;
 } (window.jQuery);
