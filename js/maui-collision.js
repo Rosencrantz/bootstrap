@@ -1,71 +1,57 @@
 !function($) {
-
-      function getBox(element) {
-            if(element[0] == window || element[0] == document) {
-                return {
-                    x0 : 0,
-                    xn : element.width(),
-                    y0 : 0,
-                    yn : element.height()
-                }
-            } else {
-                return {
-                    x0 : element.offset().left,
-                    xn : element.offset().left + element.width(),
-                    y0 : element.offset().top,
-                    yn : element.offset().top + element.height()
-                }
-            }
+        function getCoordinates(container) {
+            return container.hasOwnProperty('x0') ? container : container.coordinates();
         }
 
         $.fn.isAbove = function (container) {            
-            var box = getBox(this),
-                boundry = getBox(container);
+            var box = this.coordinates(),
+                boundry = getCoordinates(container);
 
-            return box.y0 < boundry.y0;
+            return (box.y + box.height) < boundry.y;
         }
 
         $.fn.isBelow = function (container) {            
-            var box = getBox(this),
-                boundry = getBox(container);
+            var box = this.coordinates(),
+                boundry =  getCoordinates(container);
 
-            return box.yn > boundry.yn;
+            return box.y > (boundry.y + boundry.height);
         }
         
         $.fn.isBefore = function (container) {            
-            var box = getBox(this),
-                boundry = getBox(container);
+            var box = this.coordinates(),
+                boundry = getCoordinates(container);
 
-            return box.x0 < boundry.x0;
+            return box.x < boundry.x;
         }
             
         $.fn.isAfter = function (container) {           
-            var box = getBox(this),
-                boundry = getBox(container);
+            var box = this.coordinates(),
+                boundry = getCoordinates(container);
 
-            return box.xn > boundry.xn;
+            return box.x  > (boundry.x + boundry.width);
+
         }
 
         $.fn.isInside = function (container) {            
             var element = this,
-                box = getBox(this),
-                boundry = getBox(container);
+                box = this.coordinates(),
+                boundry = getCoordinates(container);
 
-            return box.x0 > boundry.x0 
-                    && box.xn < boundry.xn
-                    && box.y0 > boundry.y0
-                    && box.yn < boundry.yn;
+            return box.x > boundry.x
+                    && (box.x + box.width) < (boundry.x + boundry.width)
+                    && box.y > boundry.y
+                    && (box.y + box.height) < (boundry.y + boundry.height);
         }
 
         $.fn.isOutside = function (container) {            
             var element = this,
-                box = getBox(this),
-                boundry = getBox(container);
+                box = this.coordinates(),
+                boundry = getCoordinates(container);
 
-            return box.x0 > boundry.xn 
-                    || box.xn < boundry.x0
-                    || box.y0 > boundry.yn
-                    || box.yn < boundry.y0;
+            return box.x > (boundry.x + boundry.width) 
+                    || (box.x + box.width) < boundry.x
+                    || box.y > (boundry.y +  boundry.height)
+                    || (box.y + box.height) < boundry.y;
 
         }
 
