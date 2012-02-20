@@ -33,9 +33,19 @@ $(function () {
 	});
 
     test("placement should place container in the middle and to the left of trigger", function () {
-		container.place(trigger, {'placement' : {'vertical' : 'middle', 'horizontal': 'left'}, 'offsetY': -Math.floor(container.height() / 2)});
+		container.place(trigger, {'placement' : {'vertical' : 'middle', 'horizontal': 'left'}, 'offsetY' : -Math.floor(container.height() / 2)});
 		ok(!container.isAbove(trigger), 'the container should not be above the trigger');
         ok(!container.isBelow(trigger), 'the container should not be below the trigger');
         equals((container.coordinates().y + Math.floor(container.height() / 2)), (trigger.coordinates().y + Math.floor(trigger.coordinates().height / 2)));
+	});
+
+    test("placement should place container below and to the right of the trigger", function () {
+		container.place(trigger, {'placement' : {'vertical' : 'top', 'horizontal': 'right'}});
+		equals(container.coordinates().x + container.coordinates().width, trigger.coordinates().x + trigger.coordinates().width);
+	});
+
+    test("placement should place container below and to the right of the trigger", function () {
+		container.place(trigger, {'placement' : {'vertical' : 'top', 'horizontal': 'center'}, 'offsetX': -Math.floor(container.width() / 2)});
+		equals(container.coordinates().x + Math.floor(container.width() / 2), trigger.coordinates().x + Math.floor(trigger.coordinates().width / 2));
 	});
 })
